@@ -233,7 +233,7 @@ class BlockerService : Service() {
             showOverlayBlockingScreen()
             
             // Show notifications as before
-            showBlockingNotification()
+            // showBlockingNotification()
             
             // Start continuous monitoring for re-access attempts
             startContinuousBlocking(currentApp)
@@ -274,7 +274,7 @@ class BlockerService : Service() {
                     val currentApp = getForegroundAppPackageName()
                     if (currentApp == blockedApp) {
                         android.util.Log.w("BlockerService", "Blocked app reappeared: $blockedApp - blocking again!")
-                        showRepeatedAccessNotification()
+                        // showRepeatedAccessNotification()
                         
                         // Also try to show overlay blocking screen again
                         handler.postDelayed({
@@ -338,7 +338,7 @@ class BlockerService : Service() {
             
             // Also create a persistent heads-up notification that stays for longer
             handler.postDelayed({
-                showPersistentBlockingReminder()
+                // showPersistentBlockingReminder()
             }, 2000)
             
         } catch (e: Exception) {

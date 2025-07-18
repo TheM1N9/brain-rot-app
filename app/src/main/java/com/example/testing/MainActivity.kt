@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -128,21 +129,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            // Show status message
+            // Update status text
+            val statusTextView = findViewById<TextView>(R.id.statusText)
             when {
                 !hasUsageStatsPermission(this) -> {
-                    Toast.makeText(this, "Please grant usage access permission", Toast.LENGTH_SHORT).show()
+                    statusTextView.text = "❌ Usage access permission required\nTap 'Grant Usage Access' to continue"
                 }
                 !hasSelectedApps -> {
-                    Toast.makeText(this, "Please select apps to block", Toast.LENGTH_SHORT).show()
+                    statusTextView.text = "📱 No apps selected for blocking\nTap 'Select Apps to Block' to get started"
                 }
                 !hasTimeLimits -> {
-                    Toast.makeText(this, "Please set time limits for selected apps", Toast.LENGTH_SHORT).show()
+                    statusTextView.text = "⏰ Time limits not configured\nTap 'Set Time Limits' to configure daily limits"
                 }
                 else -> {
                     val serviceRunning = isServiceRunning()
-                    val status = if (serviceRunning) "Service is running" else "Service is NOT running"
-                    Toast.makeText(this, "App blocker: $status", Toast.LENGTH_SHORT).show()
+                    val status = if (serviceRunning) "🟢 Active and monitoring" else "🔴 Service not running"
+                    statusTextView.text = "$status\nYour digital wellness plan is ready to go!"
                     android.util.Log.d("MainActivity", "Service running: $serviceRunning")
                     
                     // Show current usage for debugging

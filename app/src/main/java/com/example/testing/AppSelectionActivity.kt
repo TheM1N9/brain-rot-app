@@ -32,7 +32,8 @@ class AppSelectionActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         appList = getInstalledApps()
-        adapter = AppListAdapter(appList)
+        val previouslySelected = getPreviouslySelectedApps()
+        adapter = AppListAdapter(appList, previouslySelected)
         recyclerView.adapter = adapter
 
         saveButton.setOnClickListener {
@@ -62,18 +63,41 @@ class AppSelectionActivity : AppCompatActivity() {
             .sortedBy { it.appName }
     }
 
+    private fun getPreviouslySelectedApps(): Set<String> {
+        val prefs = getSharedPreferences("blocked_apps", Context.MODE_PRIVATE)
+        return prefs.getStringSet("blocked_packages", emptySet()) ?: emptySet()
+    }
+
     private fun saveSelectedApps(selectedApps: List<AppInfo>) {
         val prefs = getSharedPreferences("blocked_apps", Context.MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putStringSet("blocked_packages", selectedApps.map { it.packageName }.toSet())
+        
+        // Set default time limit of 1 minute for each selected app
+        val existingTimeLimits = prefs.getString("time_limits", null)
+        val existingMap = mutableMapOf<String, Int>()
+        existingTimeLimits?.split("|")?.forEach { entry ->
+            val parts = entry.split(",")
+            if (parts.size == 2) existingMap[parts[0]] = parts[1].toIntOrNull() ?: 0
+        }
+        
+        // Add new apps with 1 minute default, keep existing limits
+        selectedApps.forEach { app ->
+            if (!existingMap.containsKey(app.packageName)) {
+                existingMap[app.packageName] = 1 // 1 minute default
+            }
+        }
+        
+        val timeLimitsStr = existingMap.entries.joinToString("|") { "${it.key},${it.value}" }
+        editor.putString("time_limits", timeLimitsStr)
         editor.apply()
     }
 }
 
 data class AppInfo(val appName: String, val packageName: String, val icon: android.graphics.drawable.Drawable)
 
-class AppListAdapter(private val apps: List<AppInfo>) : RecyclerView.Adapter<AppListAdapter.ViewHolder>() {
-    private val selected = mutableSetOf<String>()
+class AppListAdapter(private val apps: List<AppInfo>, previouslySelected: Set<String>) : RecyclerView.Adapter<AppListAdapter.ViewHolder>() {
+    private val selected = previouslySelected.toMutableSet()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_app, parent, false)
@@ -83,6 +107,7 @@ class AppListAdapter(private val apps: List<AppInfo>) : RecyclerView.Adapter<App
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val app = apps[position]
         holder.appName.text = app.appName
+        holder.appPackage.text = app.packageName
         holder.appIcon.setImageDrawable(app.icon)
         holder.checkBox.setOnCheckedChangeListener(null)
         holder.checkBox.isChecked = selected.contains(app.packageName)
@@ -98,6 +123,7 @@ class AppListAdapter(private val apps: List<AppInfo>) : RecyclerView.Adapter<App
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val appName: TextView = view.findViewById(R.id.appName)
+        val appPackage: TextView = view.findViewById(R.id.appPackage)
         val appIcon: ImageView = view.findViewById(R.id.appIcon)
         val checkBox: CheckBox = view.findViewById(R.id.checkBox)
     }

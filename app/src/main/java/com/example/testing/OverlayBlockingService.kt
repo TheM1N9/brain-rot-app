@@ -88,40 +88,46 @@ class OverlayBlockingService : Service() {
         val layout = android.widget.LinearLayout(this)
         layout.orientation = android.widget.LinearLayout.VERTICAL
         layout.gravity = android.view.Gravity.CENTER
-        layout.setBackgroundColor(0xFF1976D2.toInt()) // Blue background
+        layout.setBackgroundColor(0xFF6366F1.toInt()) // Updated primary color
         layout.setPadding(64, 64, 64, 64)
         
         // Title
         val title = TextView(this)
-        title.text = "🚫 APP BLOCKED!"
-        title.textSize = 32f
+        title.text = "🚫 App Blocked!"
+        title.textSize = 36f
         title.setTextColor(0xFFFFFFFF.toInt())
         title.gravity = android.view.Gravity.CENTER
         title.setPadding(0, 0, 0, 32)
+        title.setTypeface(null, android.graphics.Typeface.BOLD)
         layout.addView(title)
         
         // Message
         val message = TextView(this)
-        message.text = "🚫 APP BLOCKED! 🚫\n\nYou've reached your daily time limit.\nTaking a break is good for you! 😊"
+        message.text = "You've reached your daily time limit.\n\nTaking a break is good for you! 😊\n\nTime to focus on what really matters."
         message.textSize = 18f
         message.setTextColor(0xFFFFFFFF.toInt())
         message.gravity = android.view.Gravity.CENTER
         message.setPadding(0, 0, 0, 32)
+        message.setLineSpacing(8f, 1.2f)
         layout.addView(message)
         
         // Countdown text
         val countdownTextView = TextView(this)
         countdownTextView.text = "Redirecting in $countdownSeconds seconds..."
-        countdownTextView.textSize = 16f
+        countdownTextView.textSize = 20f
         countdownTextView.setTextColor(0xFFFFFFFF.toInt())
         countdownTextView.gravity = android.view.Gravity.CENTER
-        countdownTextView.setPadding(0, 0, 0, 64)
+        countdownTextView.setPadding(0, 0, 0, 48)
+        countdownTextView.setTypeface(null, android.graphics.Typeface.BOLD)
         layout.addView(countdownTextView)
         
         // Home button
         val homeButton = Button(this)
-        homeButton.text = "Go to Home"
+        homeButton.text = "🏠 Go to Home"
         homeButton.textSize = 18f
+        homeButton.setTextColor(0xFF6366F1.toInt())
+        homeButton.setBackgroundColor(0xFFFFFFFF.toInt())
+        homeButton.setPadding(32, 16, 32, 16)
         homeButton.setOnClickListener {
             goToHome()
         }
