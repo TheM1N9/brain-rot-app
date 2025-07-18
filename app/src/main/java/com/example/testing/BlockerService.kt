@@ -220,27 +220,23 @@ class BlockerService : Service() {
     }
 
     private fun redirectToHome() {
-        try {
-            android.util.Log.d("BlockerService", "Attempting overlay blocking of current app")
-            
-            val currentApp = getForegroundAppPackageName()
-            if (currentApp != null && currentApp != packageName) {
-                // Try to kill the blocked app process (limited effectiveness)
-                tryKillBlockedApp(currentApp)
-            }
-            
-            // Show overlay blocking screen over the target app (no home intents here)
-            showOverlayBlockingScreen()
-            
-            // Show notifications as before
-            // showBlockingNotification()
-            
-            // Start continuous monitoring for re-access attempts
-            startContinuousBlocking(currentApp)
-            
+        val currentApp = getForegroundAppPackageName() ?: return
+        val appName = getAppName(currentApp)
+        
+        val intent = Intent(this, AddTimeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("blocked_app_package", currentApp)
+        intent.putExtra("app_name", appName)
+        startActivity(intent)
+    }
+
+    private fun getAppName(packageName: String): String {
+        return try {
+            val pm = packageManager
+            val appInfo = pm.getApplicationInfo(packageName, 0)
+            pm.getApplicationLabel(appInfo).toString()
         } catch (e: Exception) {
-            e.printStackTrace()
-            android.util.Log.e("BlockerService", "Failed to block app: ${e.message}")
+            packageName
         }
     }
     

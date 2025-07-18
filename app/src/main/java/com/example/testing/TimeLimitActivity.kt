@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.content.Intent
 
 class TimeLimitActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -30,7 +31,15 @@ class TimeLimitActivity : AppCompatActivity() {
         saveButton = root.findViewById(R.id.saveButton)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        appList = loadSelectedApps()
+        val specificAppPackage = intent.getStringExtra("specific_app_package")
+        if (specificAppPackage != null) {
+            // Show only the specific app that was blocked
+            appList = loadSpecificApp(specificAppPackage)
+        } else {
+            // Show all selected apps (normal flow)
+            appList = loadSelectedApps()
+        }
+        
         val timeLimits = loadTimeLimits()
         adapter = TimeLimitAdapter(appList, timeLimits)
         recyclerView.adapter = adapter
@@ -39,7 +48,13 @@ class TimeLimitActivity : AppCompatActivity() {
             val limits = adapter.getTimeLimits()
             saveTimeLimits(limits)
             Toast.makeText(this, "Time limits saved", Toast.LENGTH_SHORT).show()
-            finish()
+            
+            // If this was triggered from a blocked app, redirect back to it
+            if (specificAppPackage != null) {
+                redirectToApp(specificAppPackage)
+            } else {
+                finish()
+            }
         }
     }
 
@@ -75,6 +90,33 @@ class TimeLimitActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("blocked_apps", Context.MODE_PRIVATE)
         val str = limits.entries.joinToString("|") { "${it.key},${it.value}" }
         prefs.edit().putString("time_limits", str).apply()
+    }
+
+    private fun loadSpecificApp(packageName: String): List<AppInfo> {
+        val pm = packageManager
+        return try {
+            val app = pm.getApplicationInfo(packageName, 0)
+            listOf(AppInfo(
+                app.loadLabel(pm).toString(),
+                app.packageName,
+                app.loadIcon(pm)
+            ))
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun redirectToApp(packageName: String) {
+        try {
+            val intent = packageManager.getLaunchIntentForPackage(packageName)
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        } catch (e: Exception) {
+            // If we can't launch the app, just finish this activity
+        }
+        finish()
     }
 }
 

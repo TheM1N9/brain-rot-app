@@ -45,6 +45,8 @@
             android:taskAffinity="com.example.testing.blocking"
             android:excludeFromRecents="true"
             android:noHistory="false" />
+        <activity android:name=".MathChallengeActivity" />
+        <activity android:name=".AddTimeActivity" />
         <service android:name=".BlockerService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />

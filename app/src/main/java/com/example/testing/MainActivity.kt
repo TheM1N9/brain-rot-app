@@ -112,11 +112,11 @@ class MainActivity : AppCompatActivity() {
 
         setTimeLimitsButton.setOnClickListener {
             if (hasSelectedApps) {
-                startActivity(Intent(this@MainActivity, TimeLimitActivity::class.java))
+                startActivity(Intent(this@MainActivity, MathChallengeActivity::class.java))
             } else {
                 Toast.makeText(this, "Please select apps first", Toast.LENGTH_SHORT).show()
-                }
             }
+        }
 
             // Test button for debugging home redirection
             testButton.setOnClickListener {
