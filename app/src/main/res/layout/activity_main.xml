@@ -1,240 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:fillViewport="true"
-    tools:context=".MainActivity">
+    android:padding="24dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
+        android:id="@+id/appIcon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Digital Wellness"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/appIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/appSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take control of your screen time"
+        android:textSize="16sp"
+        android:textColor="@color/colorOnBackground"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/appTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Usage Summary Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/usageCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/colorSurface"
+        app:layout_constraintTop_toBottomOf="@id/appSubtitle">
 
-        <!-- Header Section -->
         <LinearLayout
-            android:id="@+id/headerSection"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="32dp">
-
-            <!-- App Icon with Gradient Background -->
-            <FrameLayout
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@drawable/app_icon_background"
-                android:elevation="8dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_gravity="center"
-                    android:contentDescription="App Icon" />
-
-            </FrameLayout>
+            android:padding="20dp">
 
             <TextView
-                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Brain Rot Reducer"
-                android:textSize="28sp"
+                android:text="Today's Usage"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/textPrimary"
-                android:layout_marginTop="24dp"
-                android:fontFamily="sans-serif-medium" />
+                android:textColor="@color/colorPrimary"
+                android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Take control of your digital habits. Set limits, block distractions, and focus on what matters most."
-                android:textSize="16sp"
-                android:textColor="@color/textSecondary"
-                android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:lineSpacingExtra="4dp"
-                android:maxLines="3" />
+                android:orientation="horizontal"
+                android:weightSum="3">
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/todayTotalText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0h 0m"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorOnBackground"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/blockedAppsText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorSecondary"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Blocked Apps"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorOnBackground"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/limitsReachedText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorError"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Limits Hit"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorOnBackground"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!-- Status Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/statusCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:strokeColor="@color/cardBorder"
-            app:strokeWidth="1dp"
-            app:layout_constraintTop_toBottomOf="@id/headerSection"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/usageCard">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selectAppsButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Select Apps to Block"
+            android:textSize="16sp"
+            app:icon="@android:drawable/ic_menu_manage"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp"
+            android:layout_marginBottom="12dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📊 Current Status"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textPrimary"
-                    android:layout_marginBottom="12dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/setLimitsButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Set Time Limits"
+            android:textSize="16sp"
+            app:icon="@android:drawable/ic_menu_edit"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp"
+            android:layout_marginBottom="12dp"/>
 
-                <TextView
-                    android:id="@+id/statusText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ready to set up your digital wellness plan"
-                    android:textSize="14sp"
-                    android:textColor="@color/textSecondary"
-                    android:lineSpacingExtra="2dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/viewAnalyticsButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="View Analytics"
+            android:textSize="16sp"
+            app:icon="@android:drawable/ic_menu_view"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
-            </LinearLayout>
+    </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+    <!-- Permission Request (Hidden by default) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/grantPermissionButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Grant Usage Access"
+        android:textSize="16sp"
+        app:icon="@android:drawable/ic_menu_help"
+        app:iconGravity="textStart"
+        app:iconPadding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="24dp"/>
 
-        <!-- Action Buttons -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/actionsCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:strokeColor="@color/cardBorder"
-            app:strokeWidth="1dp"
-            app:layout_constraintTop_toBottomOf="@id/statusCard"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⚙️ Setup &amp; Configuration"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textPrimary"
-                    android:layout_marginBottom="16dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/accessButton"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="🔐 Grant Usage Access"
-                    android:textSize="16sp"
-                    app:icon="@android:drawable/ic_menu_info_details"
-                    app:iconGravity="textStart"
-                    app:iconPadding="12dp"
-                    app:cornerRadius="12dp"
-                    app:backgroundTint="@color/colorPrimary"
-                    android:textColor="@color/colorOnPrimary"
-                    android:layout_marginBottom="12dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/selectAppsButton"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="📱 Select Apps to Block"
-                    android:textSize="16sp"
-                    app:icon="@android:drawable/ic_menu_manage"
-                    app:iconGravity="textStart"
-                    app:iconPadding="12dp"
-                    app:cornerRadius="12dp"
-                    app:backgroundTint="@color/colorSecondary"
-                    android:textColor="@color/colorOnSecondary"
-                    android:layout_marginBottom="12dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/setTimeLimitsButton"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="⏰ Set Time Limits"
-                    android:textSize="16sp"
-                    app:icon="@android:drawable/ic_menu_recent_history"
-                    app:iconGravity="textStart"
-                    app:iconPadding="12dp"
-                    app:cornerRadius="12dp"
-                    app:backgroundTint="@color/colorPrimaryVariant"
-                    android:textColor="@color/colorOnPrimary" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Test Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/testCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:strokeColor="@color/cardBorder"
-            app:strokeWidth="1dp"
-            app:layout_constraintTop_toBottomOf="@id/actionsCard"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🧪 Testing"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textPrimary"
-                    android:layout_marginBottom="16dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/testButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="🚀 Test Blocking System"
-                    android:textSize="16sp"
-                    app:icon="@android:drawable/ic_menu_help"
-                    app:iconGravity="textStart"
-                    app:iconPadding="12dp"
-                    app:cornerRadius="12dp"
-                    app:strokeColor="@color/colorInfo"
-                    android:textColor="@color/colorInfo" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView> 
+</androidx.constraintlayout.widget.ConstraintLayout> 

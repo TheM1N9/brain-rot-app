@@ -16,6 +16,7 @@ import android.app.usage.UsageEvents
 import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
 import android.widget.Toast
+import android.util.Log
 
 class BlockerService : Service() {
     private val handler = Handler(Looper.getMainLooper())
@@ -40,26 +41,35 @@ class BlockerService : Service() {
 
     private fun checkAndBlockApps() {
         if (!hasUsageStatsPermission(this)) {
-            android.util.Log.e("BlockerService", "No usage stats permission")
-            return
-        }
-        
-        // Add a test mode - manually trigger blocking for testing
-        val prefs = getSharedPreferences("blocked_apps", Context.MODE_PRIVATE)
-        val testMode = prefs.getBoolean("test_mode", false)
-        if (testMode) {
-            android.util.Log.d("BlockerService", "TEST MODE: Forcing redirect to home")
-            handler.post {
-                Toast.makeText(this, "TEST MODE: Redirecting to home", Toast.LENGTH_SHORT).show()
-            }
-            redirectToHome()
-            // Clear test mode after use
-            prefs.edit().putBoolean("test_mode", false).apply()
+            Toast.makeText(this, "Usage access permission required", Toast.LENGTH_SHORT).show()
             return
         }
         
         try {
-            val blocked = prefs.getStringSet("blocked_packages", emptySet()) ?: emptySet()
+            val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+            val endTime = System.currentTimeMillis()
+            val startTime = endTime - 1000 // Check last 1 second
+            
+            val usageEvents = usageStatsManager.queryEvents(startTime, endTime)
+            val event = UsageEvents.Event()
+            
+            while (usageEvents.hasNextEvent()) {
+                usageEvents.getNextEvent(event)
+                if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                    val packageName = event.packageName
+                    checkAppLimit(packageName)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("BlockerService", "Error checking apps: ${e.message}")
+        }
+    }
+    
+    private fun checkAppLimit(packageName: String) {
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val selectedApps = prefs.getStringSet("selected_apps", emptySet()) ?: emptySet()
+        
+        if (packageName in selectedApps) {
             val timeLimits = prefs.getString("time_limits", null)
                 ?.split("|")
                 ?.mapNotNull {
@@ -67,108 +77,21 @@ class BlockerService : Service() {
                     if (parts.size == 2) parts[0] to (parts[1].toIntOrNull() ?: 0) else null
                 }?.toMap() ?: emptyMap()
             
-            var currentApp = getForegroundAppPackageName()
+            val limit = timeLimits[packageName] ?: 0
+            val currentUsage = UsageUtils.getAppUsage(this, packageName)
             
-            // Fallback: If detection fails, use last known app
-            if (currentApp == null && lastKnownForegroundApp != null) {
-                currentApp = lastKnownForegroundApp
-                android.util.Log.d("BlockerService", "Using fallback app: $currentApp")
-            }
-            
-            android.util.Log.d("BlockerService", "Current foreground app: $currentApp")
-            android.util.Log.d("BlockerService", "Blocked apps: $blocked")
-            
-            if (currentApp == null) {
-                android.util.Log.d("BlockerService", "No foreground app detected")
-                return
-            }
-            
-            // Update last known foreground app
-            lastKnownForegroundApp = currentApp
-            
-            // Don't block our own app
-            if (currentApp == packageName) {
-                lastCheckedPackage = null
-                lastForegroundTimestamp = 0L
-                return
-            }
-            
-            // IMMEDIATE BLOCKING: If this is a blocked app and time limit is already reached, block immediately
-            if (blocked.contains(currentApp)) {
-                val limit = timeLimits[currentApp] ?: 0
-                if (limit > 0) {
-                    val usedMinutes = UsageUtils.getAppUsageMinutes(this, currentApp)
-                    android.util.Log.d("BlockerService", "App: $currentApp, Used: $usedMinutes, Limit: $limit")
-                    
-                    // If already over limit, block immediately without tracking more time
-                    if (usedMinutes >= limit) {
-                        android.util.Log.d("BlockerService", "IMMEDIATE BLOCK! App already over limit: $currentApp")
-                        if (!blockingInProgress) {
-                            blockingInProgress = true
-                            handler.post {
-                                Toast.makeText(this, "App blocked! Time limit already reached.", Toast.LENGTH_SHORT).show()
-                            }
-                            redirectToHome()
-                            // Reset flag after delay
-                            handler.postDelayed({
-                                blockingInProgress = false
-                            }, 3000)
-                        }
-                        return // Don't track more time
-                    }
-                    
-                    // Otherwise, track time normally
-                    val now = System.currentTimeMillis()
-                    val elapsedSeconds = if (currentApp == lastCheckedPackage && lastForegroundTimestamp > 0L) {
-                        ((now - lastForegroundTimestamp) / 1000).toInt().coerceAtLeast(1)
-                    } else {
-                        0
-                    }
-                    android.util.Log.d("BlockerService", "Elapsed seconds: $elapsedSeconds")
-                    
-                    if (elapsedSeconds > 0) {
-                        UsageUtils.incrementUsageSeconds(this, currentApp, elapsedSeconds)
-                    }
-                    lastCheckedPackage = currentApp
-                    lastForegroundTimestamp = now
-
-                    val newUsedMinutes = UsageUtils.getAppUsageMinutes(this, currentApp)
-                    android.util.Log.d("BlockerService", "App: $currentApp, Used: $newUsedMinutes, Limit: $limit")
-                    
-                    if (newUsedMinutes > 0 && newUsedMinutes % 5 == 0) {
-                        handler.post {
-                            Toast.makeText(this, "$currentApp: $newUsedMinutes/$limit minutes used", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    
-                    if (newUsedMinutes >= limit) {
-                        android.util.Log.d("BlockerService", "TIME LIMIT REACHED! Blocking $currentApp")
-                        if (!blockingInProgress) {
-                            blockingInProgress = true
-                            handler.post {
-                                Toast.makeText(this, "Time limit reached for $currentApp. Redirecting to home.", Toast.LENGTH_SHORT).show()
-                            }
-                        redirectToHome()
-                            // Reset flag after delay
-                            handler.postDelayed({
-                                blockingInProgress = false
-                            }, 3000)
-                        }
-                    }
+            if (limit > 0 && currentUsage >= limit) {
+                // Increment limits reached counter
+                val currentCount = prefs.getInt("limits_reached_today", 0)
+                prefs.edit().putInt("limits_reached_today", currentCount + 1).apply()
+                
+                // Launch AddTimeActivity
+                val intent = Intent(this, AddTimeActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra("blocked_app_package", packageName)
+                    putExtra("app_name", getAppName(packageName))
                 }
-            } else {
-                // Reset tracking when not in blocked app
-                if (lastCheckedPackage != null) {
-                    android.util.Log.d("BlockerService", "Switched from blocked app to: $currentApp")
-                }
-                lastCheckedPackage = null
-                lastForegroundTimestamp = 0L
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            android.util.Log.e("BlockerService", "Error in checkAndBlockApps: ${e.message}")
-            handler.post {
-                Toast.makeText(this, "Error monitoring apps: ${e.message}", Toast.LENGTH_SHORT).show()
+                startActivity(intent)
             }
         }
     }

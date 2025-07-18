@@ -11,11 +11,22 @@ object UsageUtils {
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     fun resetIfNeeded(context: Context) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val today = dateFormat.format(Date())
-        val lastReset = prefs.getString(LAST_RESET_KEY, null)
-        if (lastReset != today) {
-            prefs.edit().remove(USAGE_KEY).putString(LAST_RESET_KEY, today).apply()
+        val prefs = context.getSharedPreferences("usage_prefs", Context.MODE_PRIVATE)
+        val lastResetDate = prefs.getString("last_reset_date", null)
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        
+        if (lastResetDate != currentDate) {
+            // Reset usage data
+            prefs.edit()
+                .putString("last_reset_date", currentDate)
+                .putString("daily_usage", "")
+                .apply()
+            
+            // Reset limits reached counter
+            context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                .edit()
+                .putInt("limits_reached_today", 0)
+                .apply()
         }
     }
 
