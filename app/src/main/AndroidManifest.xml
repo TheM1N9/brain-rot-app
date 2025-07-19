@@ -29,13 +29,16 @@
         android:theme="@style/Theme.Testing"
         android:launchMode="singleTask">
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".MainActivity"
+            android:exported="true" />
 
         <activity android:name=".AppSelectionActivity" />
         <activity android:name=".TimeLimitActivity" />
@@ -47,6 +50,27 @@
             android:noHistory="false" />
         <activity android:name=".MathChallengeActivity" />
         <activity android:name=".AddTimeActivity" />
+        <activity android:name=".TimeIncreaseActivity"
+            android:theme="@style/Theme.Testing"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.example.testing.timeincrease"
+            android:excludeFromRecents="true"
+            android:noHistory="false"
+            android:exported="true" />
+        <activity android:name=".TimeLimitBlockingActivity"
+            android:theme="@style/Theme.Testing"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.example.testing.timelimitblocking"
+            android:excludeFromRecents="true"
+            android:noHistory="false"
+            android:exported="true" />
+        <activity android:name=".AppTimeIncreaseMathActivity"
+            android:theme="@style/Theme.Testing"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.example.testing.apptimeincreasemath"
+            android:excludeFromRecents="true"
+            android:noHistory="false"
+            android:exported="true" />
         <service android:name=".BlockerService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />

@@ -26,10 +26,30 @@
         android:layout_marginBottom="32dp"/>
 
     <TextView
+        android:id="@+id/questionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you want to increase the time?"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorOnBackground"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/problemNumberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/textSecondary"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
         android:id="@+id/problemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:layout_marginBottom="24dp"/>

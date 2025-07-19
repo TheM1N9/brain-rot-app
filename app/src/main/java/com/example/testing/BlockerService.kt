@@ -223,11 +223,51 @@ class BlockerService : Service() {
         val currentApp = getForegroundAppPackageName() ?: return
         val appName = getAppName(currentApp)
         
-        val intent = Intent(this, AddTimeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.putExtra("blocked_app_package", currentApp)
-        intent.putExtra("app_name", appName)
-        startActivity(intent)
+        android.util.Log.d("BlockerService", "Attempting to show time increase screen for $currentApp ($appName)")
+        
+        // First try to kill the blocked app to ensure our activity shows
+        tryKillBlockedApp(currentApp)
+        
+        // Add a small delay to ensure the app is killed before launching our activity
+        handler.postDelayed({
+            try {
+                android.util.Log.d("BlockerService", "About to launch TimeIncreaseActivity...")
+                
+                // Show time increase confirmation screen instead of directly going to home
+                val intent = Intent(this, TimeIncreaseActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                intent.putExtra("package_name", currentApp)
+                intent.putExtra("app_name", appName)
+                
+                android.util.Log.d("BlockerService", "Intent created with flags: ${intent.flags}")
+                android.util.Log.d("BlockerService", "Intent extras: package_name=${intent.getStringExtra("package_name")}, app_name=${intent.getStringExtra("app_name")}")
+                
+                // Use application context to avoid service context issues
+                applicationContext.startActivity(intent)
+                
+                android.util.Log.d("BlockerService", "Successfully launched TimeIncreaseActivity for $currentApp")
+                
+                // Show a notification to confirm the activity was launched
+                handler.post {
+                    Toast.makeText(this, "Time increase screen launched for $appName", Toast.LENGTH_SHORT).show()
+                }
+                
+            } catch (e: Exception) {
+                android.util.Log.e("BlockerService", "Failed to launch TimeIncreaseActivity: ${e.message}")
+                e.printStackTrace()
+                
+                // Fallback: go directly to home
+                try {
+                    val homeIntent = Intent(Intent.ACTION_MAIN)
+                    homeIntent.addCategory(Intent.CATEGORY_HOME)
+                    homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(homeIntent)
+                    android.util.Log.d("BlockerService", "Fallback: Redirected to home")
+                } catch (e2: Exception) {
+                    android.util.Log.e("BlockerService", "Failed to redirect to home: ${e2.message}")
+                }
+            }
+        }, 1000) // 1 second delay
     }
 
     private fun getAppName(packageName: String): String {
