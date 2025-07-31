@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryVariant">#1976D2</color>
-    <color name="colorSecondary">#03A9F4</color>
-    <color name="colorSecondaryVariant">#0288D1</color>
+    <!-- Primary Colors -->
+    <color name="colorPrimary">#6366F1</color>
+    <color name="colorPrimaryVariant">#4F46E5</color>
+    <color name="colorSecondary">#10B981</color>
+    <color name="colorSecondaryVariant">#059669</color>
+    
+    <!-- On Colors -->
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSecondary">#FFFFFF</color>
-    <color name="colorBackground">#F3F8FD</color>
+    
+    <!-- Background Colors -->
+    <color name="colorBackground">#FAFAFA</color>
     <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnBackground">#222222</color>
-    <color name="colorOnSurface">#222222</color>
+    <color name="colorOnBackground">#1F2937</color>
+    <color name="colorOnSurface">#1F2937</color>
+    
+    <!-- Additional Colors -->
+    <color name="colorError">#EF4444</color>
+    <color name="colorWarning">#F59E0B</color>
+    <color name="colorSuccess">#10B981</color>
+    <color name="colorInfo">#3B82F6</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradientStart">#6366F1</color>
+    <color name="gradientEnd">#8B5CF6</color>
+    
+    <!-- Card Colors -->
+    <color name="cardBackground">#FFFFFF</color>
+    <color name="cardBorder">#E5E7EB</color>
+    
+    <!-- Text Colors -->
+    <color name="textPrimary">#1F2937</color>
+    <color name="textSecondary">#6B7280</color>
+    <color name="textTertiary">#9CA3AF</color>
 </resources>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:gravity="center"
+    android:background="@color/colorPrimary">
+
+    <!-- Math Challenge Section -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🧮 Math Challenge"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorOnPrimary"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <TextView
+        android:id="@+id/problemNumberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Problem 1 of 2"
+        android:textSize="18sp"
+        android:textColor="@color/colorOnPrimary"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/problemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15 + 23 = ?"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorOnPrimary"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <EditText
+        android:id="@+id/answerInput"
+        android:layout_width="200dp"
+        android:layout_height="56dp"
+        android:hint="Enter answer"
+        android:inputType="number"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:background="@drawable/button_outline_white"
+        android:textColor="@color/colorOnPrimary"
+        android:textColorHint="@color/colorOnPrimary"
+        android:layout_marginBottom="24dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Submit"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="16dp"
+            app:backgroundTint="@color/colorOnPrimary"
+            android:textColor="@color/colorPrimary"
+            app:cornerRadius="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/newProblemButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="New Problem"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="@color/colorOnPrimary"
+            app:strokeWidth="2dp"
+            android:textColor="@color/colorOnPrimary"
+            app:cornerRadius="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Time Increase Options Section (Initially Hidden) -->
+    <TextView
+        android:id="@+id/timeIncreaseTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⏰ Choose Time Increase"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorOnPrimary"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/timeIncreaseMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select how much time you want to add:"
+        android:textSize="18sp"
+        android:textColor="@color/colorOnPrimary"
+        android:gravity="center"
+        android:layout_marginBottom="48dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fiveMinButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="➕ 5 Minutes"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            app:backgroundTint="@color/colorOnPrimary"
+            android:textColor="@color/colorPrimary"
+            app:cornerRadius="12dp"
+            android:visibility="gone"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tenMinButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="➕ 10 Minutes"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            app:backgroundTint="@color/colorOnPrimary"
+            android:textColor="@color/colorPrimary"
+            app:cornerRadius="12dp"
+            android:visibility="gone"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fifteenMinButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="➕ 15 Minutes"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/colorOnPrimary"
+            android:textColor="@color/colorPrimary"
+            app:cornerRadius="12dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</LinearLayout> 

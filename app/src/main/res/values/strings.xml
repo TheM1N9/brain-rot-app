@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">testing</string>
+    <string name="app_name">Brain Detox</string>
+    <string name="app_description">Detox your brain, reclaim your focus</string>
+    <string name="grant_usage_access">Grant Usage Access</string>
+    <string name="select_apps_to_block">Select Apps to Block</string>
+    <string name="set_time_limits">Set Time Limits</string>
+    <string name="test_blocking_system">Test Blocking System</string>
+    <string name="save_selection">Save Selection</string>
+    <string name="save_time_limits">Save Time Limits</string>
+    <string name="app_blocked_title">App Blocked!</string>
+    <string name="app_blocked_message">You\'ve reached your daily time limit.\n\nTaking a break is good for you! 😊\n\nTime to focus on what really matters.</string>
+    <string name="redirecting_message">Redirecting in %1$d seconds...</string>
+    <string name="go_to_home">Go to Home</string>
+    <string name="current_status">Current Status</string>
+    <string name="setup_configuration">Setup &amp; Configuration</string>
+    <string name="testing">Testing</string>
+    <string name="available_apps">Available Apps</string>
+    <string name="selected_apps">Selected Apps</string>
+    <string name="daily_limit_minutes">Daily limit in minutes</string>
+    <string name="minutes">Minutes</string>
 </resources>

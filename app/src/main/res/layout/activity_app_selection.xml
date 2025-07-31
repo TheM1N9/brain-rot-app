@@ -1,29 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/colorBackground"
+    android:padding="24dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select apps to block"
-        android:textSize="20sp"
-        android:layout_marginBottom="8dp"/>
+        android:orientation="vertical"
+        android:layout_marginBottom="24dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📱 Select Apps to Block"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose the apps that distract you most. We'll help you set healthy limits."
+            android:textSize="16sp"
+            android:textColor="@color/textSecondary"
+            android:lineSpacingExtra="4dp" />
+
+    </LinearLayout>
+
+    <!-- App List Card -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp"/>
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/cardBackground"
+        app:strokeColor="@color/cardBorder"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="16dp">
 
-    <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📋 Available Apps"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:layout_marginBottom="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="8dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Save Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Selection"/>
+        android:layout_height="56dp"
+        android:text="💾 Save Selection"
+        android:textSize="16sp"
+        app:icon="@android:drawable/ic_menu_save"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp"
+        app:cornerRadius="12dp"
+        app:backgroundTint="@color/colorSuccess"
+        android:textColor="@color/colorOnSecondary" />
 
 </LinearLayout> 
